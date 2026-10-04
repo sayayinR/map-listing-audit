@@ -9,7 +9,7 @@ const CREDIT: Record<Exclude<CheckStatus, "error">, number> = {
 
 // Score out of 100. Checks that errored are left out entirely, so a failed
 // lookup doesn't count against the business.
-export function computeScore(results: CheckResult[]): number {
+export function computeScore(results: CheckResult[]): number | null {
   let earned = 0;
   let possible = 0;
   for (const result of results) {
@@ -18,5 +18,5 @@ export function computeScore(results: CheckResult[]): number {
     possible += weight;
     earned += weight * CREDIT[result.status];
   }
-  return possible === 0 ? 0 : Math.round((earned / possible) * 100);
+  return possible === 0 ? null : Math.round((earned / possible) * 100);
 }

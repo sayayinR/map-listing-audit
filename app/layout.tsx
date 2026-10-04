@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,30 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <header className="border-b">
+          <nav
+            aria-label="Main"
+            className="mx-auto flex max-w-5xl items-center gap-6 p-4"
+          >
+            <Link href="/" className="font-semibold">
+              Map Listing Audit
+            </Link>
+            <ul className="flex gap-4">
+              <li>
+                <Link href="/">Dashboard</Link>
+              </li>
+              <li>
+                <Link href="/audit/new">New audit</Link>
+              </li>
+              <li>
+                <Link href="/guide">Guide</Link>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <main className="mx-auto w-full max-w-5xl flex-1 p-4"> {children}</main>
+      </body>
     </html>
   );
 }
