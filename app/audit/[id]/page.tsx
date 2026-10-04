@@ -1,3 +1,9 @@
+import {
+  checksForGroup,
+  GROUP_LABELS,
+  GROUPS,
+  STATUS_LABELS,
+} from "@/lib/group-check";
 import { sampleAudit } from "@/lib/sample-audit";
 import { computeScore } from "@/lib/score";
 
@@ -11,6 +17,13 @@ export default async function AuditPage({
   const score = computeScore(audit.checks);
   const total = audit.checks.length;
   const errored = audit.checks.filter((c) => c.status === "error").length;
+
+  const BADGE = {
+    pass: "bg-green-100 text-green-800",
+    warn: "bg-yellow-100 text-yellow-800",
+    fail: "bg-red-100 text-red-800",
+    error: "bg-gray-200 text-gray-800",
+  };
 
   return (
     <div>
@@ -52,6 +65,27 @@ export default async function AuditPage({
           </>
         )}
       </section>
+
+      {GROUPS.map((group) => (
+        <section key={group} className="mt-8">
+          <h2 className="text-xl font-semibold">{GROUP_LABELS[group]}</h2>
+          <ul className="mt-3 space-y-3">
+            {checksForGroup(audit.checks, group).map((check) => (
+              <li key={check.id} className="rounded border p-3">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`rounded px-2 py-0.5 text-sm font-medium ${BADGE[check.status]}`}
+                  >
+                    {STATUS_LABELS[check.status]}
+                  </span>
+                  <strong>{check.label}</strong>
+                </div>
+                <p className="mt-1 text-gray-600">{check.detail}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </div>
   );
 }
