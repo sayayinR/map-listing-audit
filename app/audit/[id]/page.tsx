@@ -1,9 +1,11 @@
+import { buildAudit } from "@/lib/build-audit";
 import {
   checksForGroup,
   GROUP_LABELS,
   GROUPS,
   STATUS_LABELS,
 } from "@/lib/group-check";
+import { getPlaceDetails } from "@/lib/places";
 import { sampleAudit } from "@/lib/sample-audit";
 import { computeScore } from "@/lib/score";
 
@@ -13,7 +15,8 @@ export default async function AuditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const audit = sampleAudit; // week 2: fetch the real audit by id
+  const audit =
+    id === "sample" ? sampleAudit : buildAudit(await getPlaceDetails(id));
   const score = computeScore(audit.checks);
   const total = audit.checks.length;
   const errored = audit.checks.filter((c) => c.status === "error").length;

@@ -9,6 +9,39 @@ export type PlaceSearchResult = {
   address: string;
 };
 
+const DETAILS_FIELDS = [
+  "id",
+  "displayName",
+  "formattedAddress",
+  "addressComponents",
+  "nationalPhoneNumber",
+  "websiteUri",
+  "primaryTypeDisplayName",
+  "types",
+  "regularOpeningHours.weekdayDescriptions",
+  "rating",
+  "userRatingCount",
+  "photos",
+  "reviews",
+].join(",");
+
+export async function getPlaceDetails(placeId: string) {
+  if (!API_KEY) throw new Error("GOOGLE_PLACES_API_KEY is not set");
+
+  const res = await fetch(`${BASE_URL}/places/${placeId}`, {
+    headers: {
+      "X-Goog-Api-Key": API_KEY,
+      "X-Goog-FieldMask": DETAILS_FIELDS,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Place details failed: ${res.status} ${await res.text()}`);
+  }
+
+  return res.json();
+}
+
 export async function searchPlaces(query: string): Promise<PlaceSearchResult[]> {
   if (!API_KEY) throw new Error("GOOGLE_PLACES_API_KEY is not set");
 
