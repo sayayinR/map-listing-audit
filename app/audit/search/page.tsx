@@ -20,7 +20,7 @@ export default async function SearchPage({
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">Results for "{q}"</h1>
+      <h1 className="text-2xl font-bold">Results for &ldquo;{q}&rdquo;</h1>
 
       {results.length === 0 ? (
         <p className="mt-4">
