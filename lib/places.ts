@@ -25,7 +25,7 @@ export type PlaceDetails = {
   id: string;
   displayName?: LocalizedText;
   formattedAddress?: string;
-  addressComponents?: { longText: string; shortText: string; types: string[] }[];
+  addressComponents?: { longText: string; shortText: string; types?: string[] }[];
   nationalPhoneNumber?: string;
   websiteUri?: string;
   primaryTypeDisplayName?: LocalizedText;

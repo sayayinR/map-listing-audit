@@ -8,7 +8,7 @@ export function buildAudit(place: PlaceDetails): Audit {
   const rating = place.rating;
   const hours = place.regularOpeningHours?.weekdayDescriptions;
   const city =
-    place.addressComponents?.find((c) => c.types.includes("locality"))?.longText ?? "";
+    place.addressComponents?.find((c) => c.types?.includes("locality"))?.longText ?? "";
 
   const checks: CheckResult[] = [
     place.primaryTypeDisplayName?.text
