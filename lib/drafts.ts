@@ -16,7 +16,7 @@ export function splitDrafts(text: string): ReplySegment[] {
   while (rest.length > 0) {
     const start = rest.indexOf(OPEN);
     if (start === -1) {
-      segments.push({ type: "text", text: trimPartialTag(rest), complete: true });
+      segments.push({ type: "text", text: trimPartialTag(rest, OPEN), complete: true });
       break;
     }
     if (start > 0) {
@@ -26,7 +26,7 @@ export function splitDrafts(text: string): ReplySegment[] {
     const body = rest.slice(start + OPEN.length);
     const end = body.indexOf(CLOSE);
     if (end === -1) {
-      segments.push({ type: "draft", text: body.trim(), complete: false });
+      segments.push({ type: "draft", text: trimPartialTag(body, CLOSE).trim(), complete: false });
       break;
     }
     segments.push({ type: "draft", text: body.slice(0, end).trim(), complete: true });
@@ -36,11 +36,11 @@ export function splitDrafts(text: string): ReplySegment[] {
   return segments.filter((s) => s.type === "draft" || s.text.trim() !== "");
 }
 
-// Mid-stream, a reply can end in part of an opening tag ("<dra"). Hide it
+// Mid-stream, a reply can end in part of a tag ("<dra" or "</dr"). Hide it
 // until the rest arrives so it doesn't flash on screen.
-function trimPartialTag(text: string): string {
-  for (let len = OPEN.length - 1; len > 0; len--) {
-    if (text.endsWith(OPEN.slice(0, len))) return text.slice(0, -len);
+function trimPartialTag(text: string, tag: string): string {
+  for (let len = tag.length - 1; len > 0; len--) {
+    if (text.endsWith(tag.slice(0, len))) return text.slice(0, -len);
   }
   return text;
 }

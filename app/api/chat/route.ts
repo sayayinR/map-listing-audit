@@ -34,8 +34,8 @@ async function* generateReply(
   const reply = mockReply(question, context);
 
   for (const word of reply.split(/(?<=\s)/)) {
-    if (signal.aborted) return;
     await sleep(40);
+    if (signal.aborted) return;
     yield word;
   }
 }

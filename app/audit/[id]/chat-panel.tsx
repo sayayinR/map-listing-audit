@@ -75,11 +75,14 @@ export default function ChatPanel({ context }: { context: ChatContext }) {
       const decoder = new TextDecoder();
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
         // stream: true keeps a multi-byte character split across chunks intact.
-        const chunk = decoder.decode(value, { stream: true });
-        reply += chunk;
-        updateLast((m) => ({ ...m, content: m.content + chunk }));
+        // The final decode() with no input flushes any bytes it held back.
+        const chunk = done ? decoder.decode() : decoder.decode(value, { stream: true });
+        if (chunk) {
+          reply += chunk;
+          updateLast((m) => ({ ...m, content: m.content + chunk }));
+        }
+        if (done) break;
       }
       ok = true;
     } catch (error) {
@@ -118,6 +121,7 @@ export default function ChatPanel({ context }: { context: ChatContext }) {
         <div
           ref={logRef}
           tabIndex={0}
+          role="region"
           aria-label="Conversation"
           className={`mt-4 max-h-112 overflow-y-auto rounded bg-gray-50 p-3 ${FOCUS}`}
         >
