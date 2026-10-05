@@ -9,7 +9,7 @@ Build only what's listed here. If I or you think of a new feature, don't
 build it. Suggest adding it to the Later list instead.
 
 ### Pages
-- /login: sign in (Auth.js, one allowed account)
+- /login: sign in (Supabase Auth, one allowed account)
 - /: dashboard, list of past audits, "New audit" button (SSR)
 - /audit/new: business name + city form (Client Component)
 - /audit/search?q=: Places search results (Server Component)
@@ -29,7 +29,8 @@ automatically.
 ## Stack
 - Next.js App Router (15+), TypeScript, Tailwind
 - TanStack Query for client-side data fetching and mutations
-- AWS: Lambda + API Gateway (audit and AI calls), DynamoDB, Amplify hosting
+- AWS: Lambda + API Gateway (audit and AI calls), Amplify hosting
+- Supabase: PostgreSQL for saved audits, Supabase Auth for login
 - Docker, GitHub Actions CI
 - Jest + React Testing Library
 
@@ -43,6 +44,14 @@ automatically.
 - /audit/sample uses lib/sample-audit.ts, for UI work without API calls
 - Places quotas are capped to stay in the free tier: search requests use only
   id, displayName, formattedAddress; don't add fields without asking me
+- The Supabase service role key is server-only. Client Components use only
+  the anon key.
+- One allowed account: public sign-ups are disabled in the Supabase
+  dashboard, and the server also checks the session user's email against
+  the ALLOWED_EMAIL env var, redirecting anyone else to /login.
+- Saved audits store only the place ID, business name, score, check
+  statuses, fixes, and date, pending a check of Google's Places policies;
+  full listing data is re-fetched when a report is opened.
 
 ## How to work with me
 - Use plan mode for new features; wait for my approval before writing code.
