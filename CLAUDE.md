@@ -12,7 +12,7 @@ build it. Suggest adding it to the Later list instead.
 - /login: sign in (Auth.js, one allowed account)
 - /: dashboard, list of past audits, "New audit" button (SSR)
 - /audit/new: business name + city form (Client Component)
-- /audit/[id]: scored report + "Generate fixes" (SSR)
+- /audit/search?q=: Places search results (Server Component)
 - /guide: what each check means and how it's scored (SSG)
 
 ### Audit checks
@@ -21,10 +21,12 @@ build it. Suggest adding it to the Later list instead.
 - PageSpeed Insights on the business website
 - Name/address/phone consistency between listing and website
 
-### Generate fixes
-Claude API drafts: profile description, category suggestions, review replies,
-LocalBusiness schema (JSON-LD). Every draft is editable and needs my approval.
-Nothing is published automatically.
+
+### AI chat assistant
+Chat panel on the report page. Ask questions about the audit; Claude streams
+answers and can draft fixes (profile description, category suggestions,
+review replies). Every draft needs my approval. Nothing is published
+automatically.
 
 ## Stack
 - Next.js App Router (15+), TypeScript, Tailwind
@@ -37,17 +39,15 @@ Nothing is published automatically.
 - Server Components by default; "use client" only when needed (forms,
   interactivity)
 - The Audit type in lib/types.ts is the contract between frontend and Lambdas
-- Week 1 uses sample data in lib/sample-audit.ts
-- API keys stay server-side only, never in client code
-- Use only official Google APIs, no scraping
-- Store place IDs and computed scores; don't cache Places content long-term
-- WCAG 2.1 AA: semantic HTML, labeled inputs, keyboard support, visible focus,
-  aria-live for streamed content
+- - Google Places calls live in lib/places.ts (server-only). Never import it
+  from a Client Component.
+- lib/build-audit.ts turns Places data into an Audit
+- /audit/sample uses lib/sample-audit.ts, for UI work without API calls
+- Places quotas are capped to stay in the free tier: search requests use only
+  id, displayName, formattedAddress; don't add fields without asking me
 
 ## How to work with me
-- I'm learning the App Router for job interviews. Explain Server vs. Client
-  decisions and anything that changed in Next.js 15+.
-- Make small, reviewable changes, one piece at a time.
+- use the plan mode lines from my last message, and remove the line about reviewing code I write myself.
 - When I write code myself, review it rather than rewriting it.
 
 See @AGENTS.md for Next.js agent guidance.
