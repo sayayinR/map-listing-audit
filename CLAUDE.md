@@ -13,14 +13,12 @@ build it. Suggest adding it to the Later list instead.
 - /: dashboard, list of past audits, "New audit" button (SSR)
 - /audit/new: business name + city form (Client Component)
 - /audit/search?q=: Places search results (Server Component)
+- /audit/[id]: scored report + AI chat assistant (SSR)
 - /guide: what each check means and how it's scored (SSG)
 
 ### Audit checks
 - Google Business Profile data via Places API: categories, hours, photos,
   reviews, website, phone
-- PageSpeed Insights on the business website
-- Name/address/phone consistency between listing and website
-
 
 ### AI chat assistant
 Chat panel on the report page. Ask questions about the audit; Claude streams
@@ -39,7 +37,7 @@ automatically.
 - Server Components by default; "use client" only when needed (forms,
   interactivity)
 - The Audit type in lib/types.ts is the contract between frontend and Lambdas
-- - Google Places calls live in lib/places.ts (server-only). Never import it
+- Google Places calls live in lib/places.ts (server-only). Never import it
   from a Client Component.
 - lib/build-audit.ts turns Places data into an Audit
 - /audit/sample uses lib/sample-audit.ts, for UI work without API calls
@@ -47,7 +45,13 @@ automatically.
   id, displayName, formattedAddress; don't add fields without asking me
 
 ## How to work with me
-- use the plan mode lines from my last message, and remove the line about reviewing code I write myself.
-- When I write code myself, review it rather than rewriting it.
+- Use plan mode for new features; wait for my approval before writing code.
+- After implementing, summarize what changed and why, and explain any
+  Next.js concept I should know for interviews.
 
-See @AGENTS.md for Next.js agent guidance.
+## Later
+- Website audit (PageSpeed, NAP match, schema)
+- Pushing changes through the Google Business Profile API
+- Writing changes to client websites
+- Rank tracking
+- Google Posts drafts
