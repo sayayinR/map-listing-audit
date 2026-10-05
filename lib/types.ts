@@ -68,3 +68,18 @@ export type Audit = {
   fixes: Fix[];          // empty until "Generate fixes" runs
   score: number;         // from computeScore(checks)
 };
+
+export type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+// Audit context sent with every chat request so replies can reference it.
+export type ChatContext = Pick<Audit, "business" | "checks" | "reviews"> & {
+  score: number | null;  // from computeScore; null when every check errored
+};
+
+export type ChatRequest = {
+  messages: ChatMessage[];
+  context: ChatContext;
+};

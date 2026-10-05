@@ -8,6 +8,7 @@ import {
 import { getPlaceDetails } from "@/lib/places";
 import { sampleAudit } from "@/lib/sample-audit";
 import { computeScore } from "@/lib/score";
+import ChatPanel from "./chat-panel";
 
 export default async function AuditPage({
   params,
@@ -89,6 +90,15 @@ export default async function AuditPage({
           </ul>
         </section>
       ))}
+
+      <ChatPanel
+        context={{
+          business: audit.business,
+          checks: audit.checks,
+          reviews: audit.reviews,
+          score,
+        }}
+      />
     </div>
   );
 }
