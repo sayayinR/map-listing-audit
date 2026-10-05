@@ -1,7 +1,7 @@
 import { CHECKS } from "@/lib/checks";
 import { CheckResult, CheckStatus } from "@/lib/types";
 
-const CREDIT: Record<Exclude<CheckStatus, "error">, number> = {
+export const CREDIT: Record<Exclude<CheckStatus, "error">, number> = {
   pass: 1,
   warn: 0.5,
   fail: 0,

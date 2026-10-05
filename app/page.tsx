@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+
+// Written in full: the layout's title template only applies to child
+// segments, not to the page in the same folder.
+export const metadata: Metadata = {
+  title: "Dashboard | Map Listing Audit",
+};
 
 export default function Home() {
   console.log("++++ test.................");

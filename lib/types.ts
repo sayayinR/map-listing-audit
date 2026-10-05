@@ -17,7 +17,9 @@ export type CheckDefinition = {
   group: CheckGroup;
   label: string;         // "Business hours listed"
   weight: number;
-  description: string;   // shown on /guide
+  measures: string;      // what the check looks at, shown on /guide
+  // Display text for /guide. warn is omitted for pass/fail-only checks.
+  thresholds: { pass: string; warn?: string; fail: string };
 };
 
 // Per-audit: what the check found for this business.

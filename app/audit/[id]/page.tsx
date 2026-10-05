@@ -1,14 +1,22 @@
-import { buildAudit } from "@/lib/build-audit";
+import type { Metadata } from "next";
+import { getAudit } from "@/lib/get-audit";
 import {
   checksForGroup,
   GROUP_LABELS,
   GROUPS,
+  STATUS_BADGE,
   STATUS_LABELS,
 } from "@/lib/group-check";
-import { getPlaceDetails } from "@/lib/places";
-import { sampleAudit } from "@/lib/sample-audit";
 import { computeScore } from "@/lib/score";
 import ChatPanel from "./chat-panel";
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/audit/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  const audit = await getAudit(id);
+  return { title: `${audit.business.name} audit` };
+}
 
 export default async function AuditPage({
   params,
@@ -16,18 +24,10 @@ export default async function AuditPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const audit =
-    id === "sample" ? sampleAudit : buildAudit(await getPlaceDetails(id));
+  const audit = await getAudit(id);
   const score = computeScore(audit.checks);
   const total = audit.checks.length;
   const errored = audit.checks.filter((c) => c.status === "error").length;
-
-  const BADGE = {
-    pass: "bg-green-100 text-green-800",
-    warn: "bg-yellow-100 text-yellow-800",
-    fail: "bg-red-100 text-red-800",
-    error: "bg-gray-200 text-gray-800",
-  };
 
   return (
     <div>
@@ -78,7 +78,7 @@ export default async function AuditPage({
               <li key={check.id} className="rounded border p-3">
                 <div className="flex items-center gap-2">
                   <span
-                    className={`rounded px-2 py-0.5 text-sm font-medium ${BADGE[check.status]}`}
+                    className={`rounded px-2 py-0.5 text-sm font-medium ${STATUS_BADGE[check.status]}`}
                   >
                     {STATUS_LABELS[check.status]}
                   </span>
